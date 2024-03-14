@@ -21,7 +21,7 @@
     "hueLowerBound": 70.0,
     "hueUpperBound": 230.0,
     // Saturation thresholds (range [0,1])
-    "sat_use_Otsu": true, // Use Otsu's method to determine beta for OpticalDensityThreshold
+    "sat_use_Otsu": false, // Use Otsu's method to determine beta for OpticalDensityThreshold
     "saturationLowerBound": 0.2,
     // thresholds for black areas 
     "BlackThresold": 10,
@@ -30,6 +30,8 @@
     "LOGsigma": 3, // LoG kernel width,
     "LOGLowerBound": 0.000, // LoG threshold (set to 0 to disable)
     "area_threhold": 0.05, // threhsold for ratio of valid areas ( valid OD, H, S, black & LoG criteria),
+    "useCellScorer": true, // Use Cell Scorer or not
+    "CellScorer": "CellularityScorer", // Cell Scorer to use
     "useBlobDetection": false, // Use Blob Detection or not (Blob Detection would result in significantly longer processing time)
     "blobsNumLowerBound": 5, // Blob detection threshold params,
     "blobThreshold": 0.2, // Blob threshold (0.3 will exclude some slightly blurred nuecli, maybe set to lower vlaue),

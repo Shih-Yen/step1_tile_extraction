@@ -26,21 +26,23 @@ if __name__ == "__main__":
         "--file_list",
         help="""csv file with the list of WSI files """,
         type=str,
-        default= "data_sheet/Mayo_GBM_LGG(N=166).csv" ,
+        default= "/n/data2/hms/dbmi/kyu/lab/shl968/fairness_external_validation/data_sheet/DFCI_breast(N=1255).csv" ,
     )
 
     parser.add_argument(
         "--file_index",
         help="""index of the file to run (from the file_list csv file). If not specified, run all files in the list.""",
         type=int,
-        default=None,
+        nargs='*',
+        # default=None,
+        default=[5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     )
 
     parser.add_argument(
         "--params",
         help="""Param File """,
         type=str,
-        default="step1_tile_extraction/tiling_params/tile_params_quick500_w256s128_Mayo.jsonc",
+        default="/n/data2/hms/dbmi/kyu/lab/shl968/fairness_external_validation/step1_tile_extraction/tiling_params/tile_params_quick500_w512s512_satOtsu_scorer.jsonc",
     )
 
     parser.add_argument(
@@ -86,10 +88,21 @@ if __name__ == "__main__":
     df = pd.read_csv(args.file_list,header=None)
     file_list = list(df[0])
     params = args
-    assert args.file_index < len(file_list), f"The file index ({args.file_index}) exceeds the length of the file list ({len(file_list)})"
     if args.file_index is not None:
-        params.infile = file_list[args.file_index]
-        tile_WSI(params)
+        if isinstance( args.file_index, list ):
+            for file_index in args.file_index:
+                assert file_index < len(file_list), f"The file index ({file_index}) exceeds the length of the file list ({len(file_list)})"
+                params = args
+                params.infile = file_list[file_index]
+                tile_WSI(params)
+        elif isinstance( args.file_index, int ):
+            file_index = args.file_index
+            assert file_index < len(file_list), f"The file index ({file_index}) exceeds the length of the file list ({len(file_list)})"
+            params = args
+            params.infile = file_list[file_index]
+            tile_WSI(params)
+        else:
+            raise ValueError("file_index should be either an integer or a list of integers")
     else:
         print("file_index not specified. Will run all slides in the list")
         for file_index in range(len(file_list)):
