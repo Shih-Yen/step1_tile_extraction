@@ -2,7 +2,7 @@
 
 **Dependencies:**
 
-* [HistoLab](https://github.com/histolab/histolab) for cellularity estimation.
+* Install [HistoLab](https://github.com/histolab/histolab) for cellularity estimation.
 
 **1. Create a list of the whole slide images (WSIs) you would like to tile**
 
