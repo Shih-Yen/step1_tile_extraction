@@ -35,14 +35,14 @@ if __name__ == "__main__":
         type=int,
         nargs='*',
         # default=None,
-        default=[5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+        default=np.arange(0,40).tolist(),
     )
 
     parser.add_argument(
         "--params",
         help="""Param File """,
         type=str,
-        default="/n/data2/hms/dbmi/kyu/lab/shl968/fairness_external_validation/step1_tile_extraction/tiling_params/tile_params_quick500_w512s512_satOtsu_scorer.jsonc",
+        default="/n/data2/hms/dbmi/kyu/lab/shl968/fairness_external_validation/step1_tile_extraction/tiling_params/tile_params_w512s512.jsonc",
     )
 
     parser.add_argument(

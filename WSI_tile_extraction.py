@@ -20,7 +20,6 @@ import pandas as pd
 from histolab.scorer import CellularityScorer, NucleiScorer
 from histolab.tile import Tile
 
-
 TQDM_INVERVAL = 1
 THUMBNAIL_MAG_LEVEL = 1.25
 # read params from JSON file
@@ -322,8 +321,7 @@ def tile_WSI(params):
     if hasattr(tile_params, "sat_use_Otsu"):
         if tile_params.sat_use_Otsu == True:
             print("Calulating Saturation threshold using Otsu's Method:")
-            OD_thumbnail = GrayscaleOpticalDensity(
-                np.array(thumbnail),  Io=tile_params.OD_Io)
+
             pixHue, pixSat = rgbHueSat(thumbnail)
 
             sat_threshs = threshold_multiotsu(pixSat.astype(np.float32))
@@ -332,24 +330,8 @@ def tile_WSI(params):
 
             print("sat_use_Otsu set to True. Calculating OD_beta using Otsu's method...")
             print(f"saturationLowerBound set to {sat_thresh}")
-            if params.debug:
-                plt.close()
-                # plt.hist(OD_thumbnail.flatten(),bins = 100)
-                plt.figure(figsize=(10,5))
-                plt.subplot(1,2,1)
-                pix = np.array(thumbnail)
-                counts, bins = np.histogram(pix.flatten(), bins=100)
-                plt.stairs(counts, bins)
-                for sat_thresh in sat_threshs:
-                    plt.plot([sat_thresh, sat_thresh], [0, np.max(counts)], ':r')
-                plt.subplot(1,2,2)
-                mask = np.where(pixSat>sat_thresh,1,0.5)
-                mask = np.stack([mask,mask,mask],axis=2)
-                masked = pix[:,:,0:3] * mask / 255
-                plt.imshow(masked)
-                plt.savefig('test_otsu.pdf')
-                plt.close()
 
+        
     N_tiles_est = int(xDim / lvl_xStride) * int(yDim / lvl_yStride)
     print(f"Estimated total number of tiles to check: {N_tiles_est}")
     pbar = tqdm(range(int(xDim / lvl_xStride)), mininterval=TQDM_INVERVAL)
@@ -430,7 +412,7 @@ def tile_WSI(params):
                 if nonSatSum < count_threshold:
                     continue
                 # Black
-                nonBlack = np.where(np.min(pix, axis=2)
+                nonBlack = np.where(np.max(pix, axis=2)
                                     > tile_params.BlackThresold, 1, 0)
                 nonBlackSum = np.sum(nonBlack)
                 if nonBlackSum < nonBlack_count_threshold:
@@ -673,7 +655,7 @@ if __name__ == "__main__":
         help="""Param File """,
         type=str,
         # default="image_patching_script/tile_params_default500.jsonc",
-        default='/n/data2/hms/dbmi/kyu/lab/shl968/fairness_external_validation/step1_tile_extraction/tiling_params/tile_params_quick500_w512s512_satOtsu_scorer.jsonc'
+        default='/n/data2/hms/dbmi/kyu/lab/shl968/fairness_external_validation/step1_tile_extraction/tiling_params/tile_params_w512s512.jsonc'
     )
 
     parser.add_argument(
