@@ -12,8 +12,8 @@
 
 * (see tiling_scripts/tiling_script_CPTAC_LUAD.sh for example)
 * Be sure to modify/doublecheck the following arguments:
-
-  * `FILE_LIST:` The WSI list mentioned above
+  * `FILE_LIST`: The WSI list mentioned above
+  * `TILE_PARAMS`: The tiling parameter file (see `tiling_params/tile_params_w512s512.jsonc` for example)
   * `SBATCH --array`: Number of slides in that WSI list
   * `OUTPATH`: Output directory
   * `PROJ`: dataset name (also will be the subfolder name)
@@ -26,6 +26,7 @@
 The output will be stored in `[OUTPATH]/[PROJ]`, which will contain 3 subfolders :
 
 * `thumbnail`: thumbnails for WSIs
-* `overlay_vis`: thumbnails with tiled areas highlighted. Can be used for troubleshooting.
+* `overlay_vis`: thumbnails with all valid tiles highlighted. Can be used for troubleshooting.
+* `overlay_vis_top[K]`: thumbnails with the selected top [K] tiles highlighted. Can be used for troubleshooting.
 * `tileStats`: Spreadsheets storing the coordinates of the extracted tiles (which will be used in the next steps). Each WSI will have its own .csv file.
-* *Note: Currently to save storage space I chose not to save tiles as images. Instead the tiles are extracted from WSI during inference*
+
